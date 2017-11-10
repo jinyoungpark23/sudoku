@@ -1,0 +1,69 @@
+#!/bin/sh
+
+clear
+
+make
+mkdir myoutputs
+
+echo
+echo
+echo "Testing solved"
+./sudoku inputs/in-solved > myoutputs/out-solved
+sdiff outputs/out-solved myoutputs/out-solved
+
+echo
+echo
+echo "Testing trivial"
+./sudoku inputs/in-trivial > myoutputs/out-trivial
+sdiff outputs/out-trivial myoutputs/out-trivial
+
+echo
+echo
+echo "Testing easy"
+./sudoku inputs/in-easy > myoutputs/out-easy
+sdiff outputs/out-easy myoutputs/out-easy
+
+echo
+echo
+echo "Testing sample"
+./sudoku inputs/in-sample > myoutputs/out-sample
+sdiff outputs/out-sample myoutputs/out-sample
+
+echo
+echo
+echo "Testing hard"
+./sudoku inputs/in-hard > myoutputs/out-hard
+sdiff outputs/out-hard myoutputs/out-hard
+
+echo
+echo
+echo "Testing extreme"
+./sudoku inputs/in-extreme > myoutputs/out-extreme
+sdiff outputs/out-extreme myoutputs/out-extreme
+
+echo
+echo
+echo "Testing hardestp"
+./sudoku inputs/in-hardestp > myoutputs/out-hardestp
+sdiff outputs/out-hardestp myoutputs/out-hardestp
+
+echo
+echo
+echo "Testing hardestq"
+./sudoku inputs/in-hardestq > myoutputs/out-hardestq
+sdiff outputs/out-hardestq myoutputs/out-hardestq
+
+echo
+echo
+echo "Testing reallyhardest"
+./sudoku inputs/in-reallyhardest > myoutputs/out-reallyhardest
+sdiff outputs/out-reallyhardest myoutputs/out-reallyhardest
+
+echo
+echo
+echo "Testing aiescargot"
+./sudoku inputs/in-aiescargot > myoutputs/out-aiescargot
+sdiff outputs/out-aiescargot myoutputs/out-aiescargot
+
+
+

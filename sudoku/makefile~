@@ -1,0 +1,11 @@
+sudoku: sudoku.o sudokuboard.o
+	g++ -o sudoku sudokuboard.o sudoku.o
+
+sudokuboard.o: sudokuboard.cc sudokuboard.h
+	g++ -c sudokuboard.cc
+
+sudoku.o: sudoku.cc sudokuboard.h
+	g++ -c sudoku.cc
+
+clean:
+	rm -rf sudokuboard.o sudoku.o sudoku

@@ -1,0 +1,144 @@
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+
+#include "sudokuboard.h"
+#include "stack.h"
+
+using namespace std;
+
+// Solve sudoku using brute method
+void solve(sudokuboard& board);
+
+// Move to next square
+void gotonext(size_t& r, size_t& c);
+
+// Solve sudoku using constrained square method (UNFINISHED)
+void solveCS(sudokuboard& board);
+
+int main(int argc, char** argv){
+
+  // Takes in a file
+  char* filename = argv[1];
+  ifstream in(filename);
+
+  size_t row = 0;
+  string sboard[DIM] = {};
+  string line;
+
+  // Get lines into the string array
+  while(getline(in, line) && row < DIM){
+    sboard[row] = line;
+    row++;
+  }
+
+  // Sudoku board is initialized using the string array
+  sudokuboard s = sudokuboard(sboard);
+
+  // Solve sudoku
+  solve(s);
+  s.print();
+
+  return 0;
+}
+
+// Solve sudoku using brute method
+void solve(sudokuboard& board){
+  stack stk;
+  size_t r = 0, c = 0, n, t = 1;
+
+  while(r < DIM){
+  
+    if(board.get(r, c) == '_'){
+      
+      // Fills an placeable number in
+      for(n = t; n <= DIM; n++){
+	if(board.canPlace(r, c, n)){
+	  board.place(r, c, n);
+	  stk.push(r); stk.push(c);
+	  gotonext(r, c);
+	  t = 1;
+
+	  // If filled, skips backtrack
+	  goto filled;
+	}
+      }
+
+      // When it is not filled, backtrack
+      if(stk.empty()){ // Check if the stack is empty
+	cout << "No solution..." << endl;
+	return;
+      }
+      c = stk.top(); stk.pop();
+      r = stk.top(); stk.pop();
+      t = (board.get(r, c) - '0') + 1;
+      board.remove(r, c);
+
+    filled:;     
+    }
+
+    // If the square is not '_', then go to the next square
+    else gotonext(r, c);
+  }
+}
+
+// Move r and c to the next square
+void gotonext(size_t& r, size_t& c){
+  c++;
+  if(c == DIM){
+    r++;
+    c = 0;
+  }
+}
+
+// Solve sudoku using constrained square method (UNFINISHED)
+void solveCS(sudokuboard& board){
+  stack stk;
+  int r, c, n, a, t = 1;
+  int count = 0;
+
+  while(!board.solved()){
+    count++;
+    n = 10;
+    for(int i = 0; i < DIM; i++){
+      for(int j = 0; j < DIM; j++){
+	if(board.get(i, j) == '_'){
+	  a = 0;
+	  for(int k = 1; k <= DIM; k++){
+	    if(board.canPlace(i, j, k))
+	      a++;
+	  }
+	  
+	  if(a < n){
+	    n = a; r = i; c = j;
+	  }
+	}
+      }
+    }
+    // Backtrack
+    if(n == 0){
+      cout << "(" << r << ", " << c << ")" << endl;
+      board.print();
+      cout << "backtracked" << endl;
+      if(stk.empty()){
+	cout << "No solution..." << endl;
+	return;
+      }
+      c = stk.top(); stk.pop();
+      r = stk.top(); stk.pop();
+      t = (board.get(r, c) - '0') + 1;
+      board.remove(r, c);
+    }
+    for(int i = t; i <= DIM; i++){
+      if(board.canPlace(r, c, i)){
+	board.place(r, c, i);
+	stk.push(r); stk.push(c);
+	t = 1;
+	break;
+      }
+    }
+    if(count == 100){
+      return;
+    }
+  }
+}
